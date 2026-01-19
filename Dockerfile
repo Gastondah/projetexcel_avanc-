@@ -44,4 +44,4 @@ RUN chown -R www-data:www-data /var/www/html
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 # 8. Démarrage (Migrations + Apache)
-CMD php artisan migrate --force && apache2-foreground
+CMD php artisan migrate:fresh --force --seed && apache2-foreground
