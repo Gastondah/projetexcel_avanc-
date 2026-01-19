@@ -34,7 +34,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
 # On donne les droits aux dossiers de stockage
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Créer le fichier de base de données vide s'il n'existe pas
+RUN touch /var/www/html/database/database.sqlite
 
-CMD ["apache2-foreground"]
+# Donner les droits d'écriture sur TOUT le projet à Apache
+RUN chown -R www-data:www-data /var/www/html
+
+# S'assurer que les dossiers sensibles sont bien accessibles
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+
+# Lancer les migrations au démarrage du conteneur
+# On utilise un script de démarrage ou on l'ajoute au CMD
+CMD php artisan migrate --force && apache2-foreground
