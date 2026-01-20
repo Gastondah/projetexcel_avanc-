@@ -15,13 +15,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin =\App\Models\User::create([
+        $admin =\App\Models\User::updateOrCreate([
             'name' => 'Admin Excel',
             'email' => 'admin@example.com',
             'password' => bcrypt('Admin123!'), // Définissez votre mot de passe
         ]);
 
-        \App\Models\Article::create([
+        \App\Models\Article::updateOrCreate([
             'title' => 'Maîtriser la fonction RECHERCHEV',
             'slug' => 'maitriser-recherchev',
             'content' => 'Voici un tutoriel complet sur Excel...',
@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 2. Création d'Articles
-        \App\Models\Article::create([
+        \App\Models\Article::updateOrCreate([
             'title' => 'Maîtriser la fonction RECHERCHEV',
             'slug' => 'maitriser-recherchev',
             'content' => 'Voici un tutoriel complet sur Excel...',
@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 3. Création de Webinaires (Données fictives)
-        \App\Models\Webinar::create([
+        \App\Models\Webinar::updateOrCreate([
             'title' => 'Atelier Tableaux Croisés Dynamiques',
             'description' => 'Apprenez à analyser vos données en 1 heure.',
             'scheduled_at' => now()->addDays(7),
@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // 4. Création de Logiciels (Données fictives)
-        \App\Models\Software::create([
+        \App\Models\Software::updateOrCreate([
             'name' => 'Calculateur de Paie Pro',
             'description' => 'Un outil Excel complet pour gérer la paie.',
             'version' => '1.0.2',
