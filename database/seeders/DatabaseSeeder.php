@@ -3,56 +3,70 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Article;
+use App\Models\Webinar;
+use App\Models\Software;
+use App\Models\TeamMember;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        $admin =\App\Models\User::updateOrCreate([
-            'name' => 'Admin Excel',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('Admin123!'), // Définissez votre mot de passe
-        ]);
+        // 1. UTILISATEUR (Admin)
+        $user = User::firstOrCreate(
+            ['email' => 'votre-email@exemple.com'], // On vérifie par l'email
+            [
+                'name' => 'Admin Excel',
+                'password' => Hash::make('votre_mot_de_passe_secret'),
+            ]
+        );
 
-        \App\Models\Article::updateOrCreate([
-            'title' => 'Maîtriser la fonction RECHERCHEV',
-            'slug' => 'maitriser-recherchev',
-            'content' => 'Voici un tutoriel complet sur Excel...',
-            'user_id' => $admin->id,
-            'category' => 'MAITRISER EXCEL', // Assurez-vous que ce champ existe dans votre migration
-        ]);
+        // 2. ARTICLES (On vérifie par le slug pour éviter l'erreur UNIQUE)
+        Article::firstOrCreate(
+            ['slug' => 'maitriser-recherchev'],
+            [
+                'title' => 'Maîtriser la fonction RECHERCHEV',
+                'content' => 'Voici un tutoriel complet sur Excel...',
+                'category' => 'Fonctions',
+                'user_id' => $user->id,
+                'sections' => [], // Casté en array dans ton modèle
+            ]
+        );
 
-        // 2. Création d'Articles
-        \App\Models\Article::updateOrCreate([
-            'title' => 'Maîtriser la fonction RECHERCHEV',
-            'slug' => 'maitriser-recherchev',
-            'content' => 'Voici un tutoriel complet sur Excel...',
-            'user_id' => $admin->id,
-            'category' => 'Fonctions',
-        ]);
+        // 3. WEBINAIRES (Selon ton modèle Webinar)
+        Webinar::firstOrCreate(
+            ['title' => 'Excel Avancé Live'],
+            [
+                'youtube_id' => 'dQw4w9WgXcQ',
+                'scheduled_at' => now()->addDays(7),
+                'is_finished' => false,
+            ]
+        );
 
-        // 3. Création de Webinaires (Données fictives)
-        \App\Models\Webinar::updateOrCreate([
-            'title' => 'Atelier Tableaux Croisés Dynamiques',
-            'description' => 'Apprenez à analyser vos données en 1 heure.',
-            'scheduled_at' => now()->addDays(7),
-            'link' => 'https://zoom.us/j/exemple',
-        ]);
+        // 4. LOGICIELS (Selon ton modèle Software)
+        Software::firstOrCreate(
+            ['name' => 'Calculateur Pro V1'],
+            [
+                'category' => 'Productivité',
+                'description' => 'Un outil puissant pour automatiser vos tâches.',
+                'price' => 0,
+                'video_demo_id' => 'xyz123',
+                'file_path' => 'software/calc.xlsx',
+                'screenshots' => [], // Casté en array
+            ]
+        );
 
-        // 4. Création de Logiciels (Données fictives)
-        \App\Models\Software::updateOrCreate([
-            'name' => 'Calculateur de Paie Pro',
-            'description' => 'Un outil Excel complet pour gérer la paie.',
-            'version' => '1.0.2',
-            'download_url' => 'https://votre-site.com/telecharger/paie',
-            'is_free' => true,
-        ]);
+        // 5. MEMBRE DE L'ÉQUIPE (Selon ton modèle TeamMember)
+        TeamMember::firstOrCreate(
+            ['name' => 'Gaston Dah'],
+            [
+                'role' => 'Expert Excel',
+                'bio' => 'Consultant en automation.',
+                'is_active' => true,
+                'order' => 1,
+            ]
+        );
     }
 }
