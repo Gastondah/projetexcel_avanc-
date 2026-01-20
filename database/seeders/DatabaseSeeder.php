@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin =\App\Models\User::factory()->create([
+        $admin =\App\Models\User::create([
             'name' => 'Admin Excel',
             'email' => 'admin@example.com',
             'password' => bcrypt('Admin123!'), // Définissez votre mot de passe
